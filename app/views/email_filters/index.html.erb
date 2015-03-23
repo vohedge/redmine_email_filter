@@ -1,0 +1,41 @@
+<div class="contextual">
+  <%= link_to "New filter", new_email_filter_path, :class => 'icon icon-add' %>
+</div>
+
+<h2>Email Filters</h2>
+
+<div class="template_box">
+
+  <table class="list">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Project</th>
+      <th>Sort</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <% @email_filters.each do |filter| %>
+        <tr class="<%= cycle("odd", "even") %>">
+          <td align="center">
+            <%= link_to edit_email_filter_path(filter) do %>
+              <%= filter.name %>
+            <% end %>
+          </td>
+          <td align="center">
+            <% project = Project.find(filter.project_id) %>
+            <%= project.name %>
+          </td>
+          <td class="reorder">
+            <%= reorder_links('email_filter', {:action => 'update', :id => filter, :page => params[:page]}, :put) %>
+          </td>
+          <td class="buttons">
+            <%= delete_link email_filter_path(filter) %>
+          </td>
+        </tr>
+    <% end %>
+  </table>
+
+</div>
+

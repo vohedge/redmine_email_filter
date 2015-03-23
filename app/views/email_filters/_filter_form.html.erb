@@ -1,0 +1,16 @@
+<%= labelled_form_for @email_filter, validate: true, html: { class: 'tabular' } do |f| -%>
+  <%= error_messages_for 'email_filter' %>
+  <div class="box">
+    <p><%= f.text_field :name, :size => 50, :required => true %></p>
+    <p>
+      <% @projects = Project.all %>
+      <%= f.select :project_id, @projects.map{|t| [t.name, t.id]}, label: "Project to save emails", required: true %>
+    </p>
+    <p>
+      <%= f.select :operator, {"All" => "and", "Any" => "or"}, label: "Operator", required: true %>
+      of the following conditions are met:
+    </p>
+  </div>
+  <%= f.submit l(:button_create) %>
+<% end %>
+
