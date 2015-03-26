@@ -7,5 +7,6 @@ Redmine::Plugin.register :redmine_email_filter do
   version '0.0.1'
   url 'https://github.com/vohedge/redmine_email_filter.git'
   author_url 'https://github.com/vohedge/redmine_email_filter.git'
+  menu :admin_menu, :redmine_email_filter, { controller: 'email_filters', action: 'index'}, caption: 'Eamil filters'
 end
 
