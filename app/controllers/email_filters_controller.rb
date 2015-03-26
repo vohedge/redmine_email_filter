@@ -13,10 +13,15 @@ class EmailFiltersController < ApplicationController
 
   def new
     @email_filter = EmailFilter.new
+    @email_filter.email_filter_conditions.build
   end
 
   def edit
     @email_filter = EmailFilter.find(params[:id])
+
+    if @email_filter.email_filter_conditions.count <= 0
+      @email_filter.email_filter_conditions.build
+    end
   end
 
   def create
