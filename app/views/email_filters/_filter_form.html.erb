@@ -183,14 +183,10 @@
         _remove_item: function(index) {
           if ( this.items[index].get_id() == undefined ) {
             this.items[index].destroy();
+            this.items.splice(index,1);
           } else {
             this.items[index].disable();
           }
-          this.items.splice(index,1);
-        },
-
-        _init_del_flag: function() {
-
         },
 
         _listen_condition_del_event: function(index) {
