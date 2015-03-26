@@ -1,3 +1,6 @@
 <h2>Email Filter</h2>
 
-<%= render 'filter_form' %>
+<%= form_for @email_filter, validate: true, html: { class: 'tabular' } do |f| -%>
+  <%= render partial: 'filter_form', locals: {f: f} %>
+  <%= f.submit l(:button_save) %>
+<% end %>

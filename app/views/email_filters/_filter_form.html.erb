@@ -1,58 +1,56 @@
-<%= form_for @email_filter, validate: true, html: { class: 'tabular' } do |f| -%>
-  <%= error_messages_for 'email_filter' %>
-  <div class="box">
-    <p>
-      <%= label_tag :name do %>
-        Name<span class="required"> *</span>
+<%= error_messages_for 'email_filter' %>
+
+<div class="box">
+  <p>
+    <%= label_tag :name do %>
+      Name<span class="required"> *</span>
+    <% end %>
+    <%= f.text_field :name, :size => 50 %>
+  </p>
+  <p>
+    <%= label_tag :project_id do %>
+      Project to save emails<span class="required"> *</span>
+    <% end %>
+    <% @projects = Project.all %>
+    <%= f.select :project_id, @projects.map{|t| [t.name, t.id]} %>
+  </p>
+  <p>
+    <%= label_tag :operator do %>
+      Operator of conditions<span class="required"> *</span>
+    <% end %>
+    <%= f.select :operator, {"All" => "and", "Any" => "or"} %>
+    of the following conditions are met:
+  </p>
+  <div id="conditions" style="padding-left: 180px;">
+    <%= label_tag :operator do %>
+      Conditions<span class="required"> *</span>
+    <% end %>
+    <table>
+      <%= f.fields_for :email_filter_conditions, include_id: false do |condition| %>
+        <tr>
+          <td>
+            <%= condition.select :email_field, {"From" => "from",
+                                             "To"      => "to",
+                                             "cc"      => "cc",
+                                             "Subject" => "subject",
+                                             "Body"    => "body"} %>
+          </td>
+          <td>
+            <%= condition.select :match_type, {"Include" => "include",
+                                           "Not include" => "not_include"} %>
+          </td>
+          <td><%= condition.text_field :match_text, size: 30 %></td>
+          <td class="buttons">
+            <a class="icon icon-add" href=""></a>
+            <a class="icon icon-del" href=""></a>
+          </td>
+          <%= condition.hidden_field :id %>
+          <%= condition.hidden_field :_destroy %>
+        </tr>
       <% end %>
-      <%= f.text_field :name, :size => 50 %>
-    </p>
-    <p>
-      <%= label_tag :project_id do %>
-        Project to save emails<span class="required"> *</span>
-      <% end %>
-      <% @projects = Project.all %>
-      <%= f.select :project_id, @projects.map{|t| [t.name, t.id]} %>
-    </p>
-    <p>
-      <%= label_tag :operator do %>
-        Operator of conditions<span class="required"> *</span>
-      <% end %>
-      <%= f.select :operator, {"All" => "and", "Any" => "or"} %>
-      of the following conditions are met:
-    </p>
-    <div id="conditions" style="padding-left: 180px;">
-      <%= label_tag :operator do %>
-        Conditions<span class="required"> *</span>
-      <% end %>
-      <table>
-        <%= f.fields_for :email_filter_conditions, include_id: false do |condition| %>
-          <tr>
-            <td>
-              <%= condition.select :email_field, {"From" => "from",
-                                               "To"      => "to",
-                                               "cc"      => "cc",
-                                               "Subject" => "subject",
-                                               "Body"    => "body"} %>
-            </td>
-            <td>
-              <%= condition.select :match_type, {"Include" => "include",
-                                             "Not include" => "not_include"} %>
-            </td>
-            <td><%= condition.text_field :match_text, size: 30 %></td>
-            <td class="buttons">
-              <a class="icon icon-add" href=""></a>
-              <a class="icon icon-del" href=""></a>
-            </td>
-            <%= condition.hidden_field :id %>
-            <%= condition.hidden_field :_destroy %>
-          </tr>
-        <% end %>
-      </table>
-    </div>
+    </table>
   </div>
-  <%= f.submit l(:button_create) %>
-<% end %>
+</div>
 
 <script type="text/javascript">
 
