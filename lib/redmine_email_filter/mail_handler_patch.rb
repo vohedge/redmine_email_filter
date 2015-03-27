@@ -14,8 +14,9 @@ module RedmineEmailFilter
       def receive_with_email_filter(email)
         email_filters = EmailFilter.all.order(:position)
 
-        unless email_filters
-          receive_without_email_filter(email)
+        if email_filters.length < 1
+          issue = receive_without_email_filter(email)
+          return issue
         end
 
         email_filters.each do |filter|
@@ -28,18 +29,20 @@ module RedmineEmailFilter
             text = email.subject if condition.email_field == 'subject'
             text = email.decoded if condition.email_field == 'body'
             if is_match(condition.match_type, condition.match_text, text)
-              match = match + 1
+              match   = match + 1
             else
               unmatch = unmatch + 1
             end
           end
 
           if ( filter.operator == 'and' && unmatch == 0 )
-            receive_without_email_filter(email)
+            issue = receive_without_email_filter(email)
+            return issue
           end
 
           if ( filter.operator == 'or' && match > 0 )
-            receive_without_email_filter(email)
+            issue = receive_without_email_filter(email)
+            return issue
           end
         end
       end
