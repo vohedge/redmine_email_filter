@@ -19,11 +19,11 @@ class EmailFilter < ActiveRecord::Base
                   :email_filter_conditions_attributes
 
   validates :name,       presence: true
-  validates :project_id, presence: true
-  validates :operator,   presence: true
-  # validate do
-  #   check_email_filter_conditions_number
-  # end
+  validates :project_id, presence: true, numericality: { only_integer: true }
+  validates :operator,   presence: true,
+                         inclusion: { in: %w(and or), message: "%{value} is not a valid operator" }
+  validates :position,   presence: true, numericality: { only_integer: true }
+  validate  :must_have_email_filter_condition
 
   private
 
