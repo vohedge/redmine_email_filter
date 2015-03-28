@@ -1,4 +1,5 @@
 require 'redmine_email_filter/mail_handler_patch'
+require 'email_filters_hooks'
 
 Redmine::Plugin.register :redmine_email_filter do
   name 'Redmine Email Filter plugin'
