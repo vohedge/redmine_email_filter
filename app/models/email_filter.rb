@@ -25,16 +25,41 @@ class EmailFilter < ActiveRecord::Base
   validates :position,   presence: true, numericality: { only_integer: true }
   validate  :must_have_email_filter_condition
 
-  private
+  def applicable?(email)
+    match   = 0;
+    unmatch = 0;
 
-    def email_filter_conditions_count_valid?
-      email_filter_conditions.count >= EMAIL_FILTER_CONDITION_COUNT_MIN
+    self.email_filter_conditions.each do |condition|
+      text = email.to.to_s   if condition.email_field == 'to'
+      text = email.from.to_s if condition.email_field == 'from'
+      text = email.cc.to_s   if condition.email_field == 'cc'
+      text = email.subject   if condition.email_field == 'subject'
+      text = email.decoded   if condition.email_field == 'body'
+      if is_match(condition.match_type, condition.match_text, text)
+        match   = match + 1
+      else
+        unmatch = unmatch + 1
+      end
     end
 
-    def check_email_filter_conditions_number
-      unless email_filter_conditions_count_valid?
-        errors.add(:base, :email_filter_conditions_too_short, :count => EMAIL_FILTER_CONDITION_COUNT_MIN)
+    return true if self.operator == 'and' && unmatch == 0
+    return true if self.operator == 'or' && match > 0
+    return false
+  end
+
+  private
+
+    def must_have_email_filter_condition
+      if email_filter_conditions.empty? or email_filter_conditions.all? {|condition| condition.marked_for_destruction? }
+        errors.add(:base, 'Must have at least one condition')
       end
+    end
+
+    def is_match(match_type, match_text, text)
+      result = text.include?(match_text)
+      return true if match_type == 'include' && result
+      return true if match_type == 'not_include' && ! result
+      false
     end
 end
 
