@@ -6,7 +6,7 @@ class EmailFiltersHooks < Redmine::Hook::ViewListener
 
   # Add Javascript class
   def view_layouts_base_body_bottom(_context = {})
-    # javascript_include_tag 'email_filters.js', plugin: 'redmine_email_filter'
+    javascript_include_tag 'email_filters.js', plugin: 'redmine_email_filter'
   end
 end
 
