@@ -2,6 +2,9 @@
 class EmailFiltersController < ApplicationController
   unloadable
 
+  before_filter :require_login
+  before_filter :authenticate_rights
+
   layout 'admin'
 
   def index
@@ -50,4 +53,9 @@ class EmailFiltersController < ApplicationController
     redirect_to email_filters_url, notice: "Email filter deleted success!"
   end
 
+  private
+
+    def authenticate_rights
+      authorize(params[:controller], params[:action], true)
+    end
 end
