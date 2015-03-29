@@ -2,6 +2,10 @@
 
 Redmine plugin for filtering email ticket creation.
 
+When an email is received (by Redmine default rake task with cron, or by plugins),
+this plugin checks defined conditions. If the conditions are fulfilled, received 
+email is saved as a ticket into defined project.
+
 ## Usage
 
 Add a filter.
@@ -31,6 +35,14 @@ To uninstall the plugin migrate the database back and remove the plugin:
     rm -rf plugins/redmine_email_filter
 
 Further information about plugin installation can be found at: http://www.redmine.org/wiki/redmine/Plugins
+
+## Cron
+
+Example
+
+    */30 * * * * redmineuser rake -f /path/to/redmine/appdir/Rakefile redmine:email:receive_imap RAILS_ENV="production" host=imap.foo.bar username=redmine@somenet.foo password=xxx
+
+See [Receiving emails](http://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails)
 
 ## Contribute
 
