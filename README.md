@@ -4,11 +4,33 @@ Redmine plugin for filtering email ticket creation.
 
 ## Usage
 
+Add a filter.
+
+<add a image>
+
+Add some conditions.
+
+<add a image>
+
 ## Supported versions
+
+Testing only Redmine 3.0
 
 ## Install
 
-## Uninstall
+To install the plugin clone the repo from github and migrate the database:
+
+    cd /path/to/redmine/
+    git clone git://github.com/vohedge/redmine_email_filter.git plugins/redmine_email_filter
+    rake redmine:plugins:migrate RAILS_ENV=production
+
+To uninstall the plugin migrate the database back and remove the plugin:
+
+    cd /path/to/redmine/
+    rake redmine:plugins:migrate NAME=redmine_email_filter VERSION=0 RAILS_ENV=production
+    rm -rf plugins/redmine_email_filter
+
+Further information about plugin installation can be found at: http://www.redmine.org/wiki/redmine/Plugins
 
 ## Contribute
 
