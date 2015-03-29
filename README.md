@@ -6,11 +6,11 @@ Redmine plugin for filtering email ticket creation.
 
 Add a filter.
 
-<add a image>
+![Administration > Email filters](screenshot1.png)
 
 Add some conditions.
 
-<add a image>
+![Administration > Email filters > Edit](screenshot2.png)
 
 ## Supported versions
 
