@@ -81,7 +81,7 @@ class EmailFilterTest < ActiveSupport::TestCase
       email_filter.project_id = id 
       assert_equal false, email_filter.save
     end
-    %w{1 100}.each do |id|
+    %w{1 2}.each do |id|
       email_filter = create_email_filter
       email_filter.project_id = id 
       assert_equal true, email_filter.save
@@ -140,6 +140,14 @@ class EmailFilterTest < ActiveSupport::TestCase
       email_filter.email_filter_conditions.first.match_type = match_type
       assert_equal true, email_filter.save
     end
+  end
+
+  # OTHER
+
+  def test_email_filter_project_id_presence
+    email_filter = create_email_filter
+    email_filter.project_id = 9999
+    assert_equal false, email_filter.save
   end
 
   ################################################################################

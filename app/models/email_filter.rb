@@ -20,6 +20,7 @@ class EmailFilter < ActiveRecord::Base
 
   validates :name,       presence: true
   validates :project_id, presence: true, numericality: { only_integer: true }
+  validate  :must_have_valid_project_id
   validates :operator,   presence: true,
                          inclusion: { in: %w(and or), message: "%{value} is not a valid operator" }
   validates :position,   presence: true, numericality: { only_integer: true }
@@ -48,6 +49,12 @@ class EmailFilter < ActiveRecord::Base
   end
 
   private
+
+    def must_have_valid_project_id
+      unless Project.find_by_id(project_id)
+        errors.add(:base, 'Must have a project')
+      end
+    end
 
     def must_have_email_filter_condition
       if email_filter_conditions.empty? or email_filter_conditions.all? {|condition| condition.marked_for_destruction? }

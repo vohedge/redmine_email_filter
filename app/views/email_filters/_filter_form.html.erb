@@ -12,7 +12,11 @@
       Project to save emails<span class="required"> *</span>
     <% end %>
     <% @projects = Project.all %>
-    <%= f.select :project_id, @projects.map{|t| [t.name, t.id]} %>
+    <% if @projects.length > 0 %>
+      <%= f.select :project_id, @projects.map{|t| [t.name, t.id]} %>
+    <% else %>
+      Project not found
+    <% end %>
   </p>
   <p>
     <%= label_tag :operator do %>

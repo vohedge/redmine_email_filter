@@ -24,8 +24,10 @@
             <% end %>
           </td>
           <td align="center">
-            <% project = Project.find(filter.project_id) %>
+            <% project = Project.find_by_id(filter.project_id) %>
+            <% if project %>
             <%= project.name %>
+            <% end %>
           </td>
           <td class="reorder">
             <%= reorder_links('email_filter', {:action => 'update', :id => filter, :page => params[:page]}, :put) %>
