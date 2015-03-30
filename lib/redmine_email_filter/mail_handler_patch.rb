@@ -14,10 +14,8 @@ module RedmineEmailFilter
       def receive_with_email_filter(email)
         email_filters = EmailFilter.where(active: true).order(:position)
 
-        if email_filters.length < 1
-          issue = receive_without_email_filter(email)
-          return issue
-        end
+        # Ignore all emails when no active filter exists
+        return if email_filters.length < 1
 
         email_filters.each do |filter|
           t = filter.applicable?(email)
