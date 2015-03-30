@@ -12,7 +12,7 @@ module RedmineEmailFilter
       private
   
       def receive_with_email_filter(email)
-        email_filters = EmailFilter.all.order(:position)
+        email_filters = EmailFilter.where(active: true).order(:position)
 
         if email_filters.length < 1
           issue = receive_without_email_filter(email)

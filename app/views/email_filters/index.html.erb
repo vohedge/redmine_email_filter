@@ -11,6 +11,7 @@
     <tr>
       <th>Name</th>
       <th>Project</th>
+      <th>Active?</th>
       <th>Sort</th>
       <th></th>
     </tr>
@@ -27,6 +28,11 @@
             <% project = Project.find_by_id(filter.project_id) %>
             <% if project %>
             <%= project.name %>
+            <% end %>
+          </td>
+          <td align="center">
+            <% if filter.active %>
+              <%= image_tag('toggle_check.png') %>
             <% end %>
           </td>
           <td class="reorder">

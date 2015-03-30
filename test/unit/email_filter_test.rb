@@ -370,7 +370,7 @@ class EmailFilterTest < ActiveSupport::TestCase
       email_filter = EmailFilter.new(name: 'Filter for testing',
                                      project_id: @project.id,
                                      operator: 'and',
-                                     position: 1)
+                                     position: 0)
       email_filter.email_filter_conditions.build(email_field: 'to',
                                                  match_type: 'include',
                                                  match_text: 'testing')

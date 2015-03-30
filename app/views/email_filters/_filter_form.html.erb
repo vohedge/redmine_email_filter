@@ -8,6 +8,13 @@
     <%= f.text_field :name, :size => 50 %>
   </p>
   <p>
+    <%= label_tag :active do %>
+      Active?
+    <% end %>
+    <%= hidden_field_tag 'email_filter[active]', false %>
+    <%= f.check_box :active, {}, true, false %>
+  </p>
+  <p>
     <%= label_tag :project_id do %>
       Project to save emails<span class="required"> *</span>
     <% end %>

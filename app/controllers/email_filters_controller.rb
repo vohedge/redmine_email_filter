@@ -28,6 +28,7 @@ class EmailFiltersController < ApplicationController
 
   def create
     @email_filter = EmailFilter.new(params[:email_filter])
+    @email_filter.position = EmailFilter.count
 
     if @email_filter.save
       redirect_to email_filters_url, notice: "Email filter creation is success!"

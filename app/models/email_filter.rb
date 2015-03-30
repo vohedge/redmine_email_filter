@@ -15,15 +15,17 @@ class EmailFilter < ActiveRecord::Base
                   :project_id,
                   :operator,
                   :position,
+                  :active,
                   :move_to,
                   :email_filter_conditions_attributes
 
   validates :name,       presence: true
   validates :project_id, presence: true, numericality: { only_integer: true }
-  validate  :must_have_valid_project_id
   validates :operator,   presence: true,
                          inclusion: { in: %w(and or), message: "%{value} is not a valid operator" }
   validates :position,   presence: true, numericality: { only_integer: true }
+  validates :active,     inclusion: { in: [true, false] }
+  validate  :must_have_valid_project_id
   validate  :must_have_email_filter_condition
 
   def applicable?(email)
