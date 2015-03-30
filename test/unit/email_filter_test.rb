@@ -8,8 +8,6 @@ class EmailFilterTest < ActiveSupport::TestCase
   FIXTURES_PATH = File.dirname(__FILE__) + '/../fixtures/email'
 
   def setup
-    @project = Project.find(1)
-    # @email_filter = EmailFilter.new
   end
 
   ################################################################################
@@ -366,23 +364,10 @@ class EmailFilterTest < ActiveSupport::TestCase
 
   private
 
-    def create_email_filter
-      email_filter = EmailFilter.new(name: 'Filter for testing',
-                                     project_id: @project.id,
-                                     operator: 'and',
-                                     position: 0)
-      email_filter.email_filter_conditions.build(email_field: 'to',
-                                                 match_type: 'include',
-                                                 match_text: 'testing')
-      email_filter
-    end
-
     def load_email(filename, options={})
       raw = IO.read(File.join(FIXTURES_PATH, filename))
       yield raw if block_given?
       Mail.new(raw)
     end
-
-
 end
 
