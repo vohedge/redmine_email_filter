@@ -37,7 +37,14 @@ class EmailFilter < ActiveRecord::Base
       text = email.from.to_s if condition.email_field == 'from'
       text = email.cc.to_s   if condition.email_field == 'cc'
       text = email.subject   if condition.email_field == 'subject'
-      text = email.decoded   if condition.email_field == 'body'
+
+      if condition.email_field == 'body'
+        if email.multipart?
+          text = email.text_part.decoded
+        else
+          text = email.decoded
+        end
+      end
 
       logger.debug "[redmine_email_filter]  - condition.email_field: #{condition.email_field}" if logger && logger.debug?
       logger.debug "[redmine_email_filter]  - condition.match_type: #{condition.match_type}" if logger && logger.debug?
