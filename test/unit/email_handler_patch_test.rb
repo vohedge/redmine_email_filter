@@ -85,6 +85,37 @@ class EmailFilterEamilHanderTest < ActiveSupport::TestCase
     assert_equal issue_length, Issue.count
   end
 
+  def test_multiple_filter_2nd_valid
+    # issue length
+    issue_length = Issue.count
+
+    # Set up email filter
+    email_filter1 = create_email_filter
+    condition1 = EmailFilterCondition.new(email_field: 'to',
+                                         match_type: 'include',
+                                         match_text: 'cat@somenet.foo')
+    email_filter1.email_filter_conditions = [condition1]
+    email_filter1.project_id = 1
+    email_filter1.save
+
+    email_filter2 = create_email_filter
+    condition2 = EmailFilterCondition.new(email_field: 'to',
+                                         match_type: 'include',
+                                         match_text: 'dog@somenet.foo')
+    email_filter2.email_filter_conditions = [condition2]
+    email_filter2.project_id = 2
+    email_filter2.save
+
+    # Email receive
+    issue = submit_email('email001.eml',
+                         unknown_user: 'accept',
+                         no_permission_check: 1)
+
+    # Assert
+    assert_equal 2, issue.project_id
+    assert_equal issue_length + 1, Issue.count
+  end
+
   private
 
     def submit_email(filename, options={})
