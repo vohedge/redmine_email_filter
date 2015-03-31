@@ -49,7 +49,6 @@ See [Receiving emails](http://www.redmine.org/projects/redmine/wiki/RedmineRecei
 ### How to test
 
     $ cd /path/to/redmine
-    $ bundle install
     $ bundle exec rake redmine:plugins:test NAME=redmine_email_filter
 
 ### Pull Request
