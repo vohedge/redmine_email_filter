@@ -19,11 +19,17 @@ module RedmineEmailFilter
         return if email_filters.length < 1
 
         email_filters.each do |filter|
+          logger.debug "[redmine_email_filter] Proccessing Filter: #{filter.name}" if logger && logger.debug?
+
           if ( filter.applicable?(email) )
             issue = receive_without_email_filter(email)
+            logger.debug "[redmine_email_filter] Ticket Created: #{issue.subject}" if logger && logger.debug?
+
             return issue
           end
         end
+
+        logger.debug "[redmine_email_filter] No Match Filter" if logger && logger.debug?
         return false
       end
 
