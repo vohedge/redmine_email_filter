@@ -33,19 +33,21 @@ class EmailFilter < ActiveRecord::Base
     unmatch = 0;
 
     self.email_filter_conditions.each do |condition|
-      text = email.to.to_s   if condition.email_field == 'to'
-      text = email.from.to_s if condition.email_field == 'from'
-      text = email.cc.to_s   if condition.email_field == 'cc'
-      text = email.subject   if condition.email_field == 'subject'
+      text = ''
+      text = email.to.to_s   if condition.email_field == 'to'      && email.respond_to?(:to)
+      text = email.from.to_s if condition.email_field == 'from'    && email.respond_to?(:from)
+      text = email.cc.to_s   if condition.email_field == 'cc'      && email.respond_to?(:cc)
+      text = email.subject   if condition.email_field == 'subject' && email.respond_to?(:subject)
 
       if condition.email_field == 'body'
-        if email.multipart?
-          text = email.text_part.decoded
-        else
+        if email.multipart? and email.respond_to?(:text_part) and email.text_part.respond_to?(:decoded)
+          text = email.text_part.decoded 
+        elsif not email.multipart? and email.respond_to?(:decoded)
           text = email.decoded
         end
       end
 
+      logger.debug "[redmine_email_filter]  * condition.id: #{condition.id}" if logger && logger.debug?
       logger.debug "[redmine_email_filter]  - condition.email_field: #{condition.email_field}" if logger && logger.debug?
       logger.debug "[redmine_email_filter]  - condition.match_type: #{condition.match_type}" if logger && logger.debug?
       logger.debug "[redmine_email_filter]  - condition.match_text: #{condition.match_text}" if logger && logger.debug?
