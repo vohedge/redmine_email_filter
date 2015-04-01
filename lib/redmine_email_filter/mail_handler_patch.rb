@@ -14,6 +14,15 @@ module RedmineEmailFilter
   
       def receive_with_email_filter(email)
         # Work with "redmine_email_integration" plugin
+        #
+        # Email Processing:
+        #
+        #  - New mail:   is checked if the message-id has already existed in EmailMessage.
+        #                If the message-id is not existed, then goes to filtering process.
+        #
+        #  - Reply mail: is delegated to redmine_email_integration plugin directly.
+        #                There is no filtering process.
+        #  
         if with_redmine_email_integration? and new_email?(email)
           if EmailMessage.message_id_exists?(email.message_id)
             logger.debug "[redmine_email_filter] Ignore duplicate email" if logger && logger.debug?
@@ -29,6 +38,7 @@ module RedmineEmailFilter
         email_filters = EmailFilter.where(active: true).order(:position)
         return if email_filters.length < 1
 
+        # Now the filtering!
         email_filters.each do |filter|
           logger.debug "[redmine_email_filter] Proccessing Filter: #{filter.name}" if logger && logger.debug?
 
