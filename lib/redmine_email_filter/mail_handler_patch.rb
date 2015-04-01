@@ -13,9 +13,20 @@ module RedmineEmailFilter
       private
   
       def receive_with_email_filter(email)
-        email_filters = EmailFilter.where(active: true).order(:position)
+        # Work with "redmine_email_integration" plugin
+        if with_redmine_email_integration? and new_email?(email)
+          if EmailMessage.message_id_exists?(email.message_id)
+            logger.debug "[redmine_email_filter] Ignore duplicate email" if logger && logger.debug?
+            return
+          end
+        elsif with_redmine_email_integration? and not new_email?(email)
+          logger.debug "[redmine_email_filter] Delegate to redmine_email_integration plugin" if logger && logger.debug?
+          receive_without_email_filter(email)
+          return
+        end
 
         # Ignore all emails when no active filter exists
+        email_filters = EmailFilter.where(active: true).order(:position)
         return if email_filters.length < 1
 
         email_filters.each do |filter|
@@ -42,6 +53,20 @@ module RedmineEmailFilter
           end
         end
         target_project_without_email_filter
+      end
+
+      def new_email?(email)
+        origin_message_id = email.references.first if email.references.class == Array
+        origin_message_id = email.in_reply_to unless origin_message_id
+        unless origin_message_id
+          return true
+        else
+          return false
+        end
+      end
+
+      def with_redmine_email_integration?
+        File.exist?(Rails.root.to_s + '/plugins/redmine_email_integration/init.rb')
       end
     end # module InstanceMethods
   end # module MailHandlerPatch
