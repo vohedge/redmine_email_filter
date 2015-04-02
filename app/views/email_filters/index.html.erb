@@ -1,18 +1,18 @@
 <div class="contextual">
-  <%= link_to "New filter", new_email_filter_path, :class => 'icon icon-add' %>
+  <%= link_to l(:label_email_filter_new), new_email_filter_path, :class => 'icon icon-add' %>
 </div>
 
-<h2>Email Filters</h2>
+<h2><%= l(:label_email_filter_list) %></h2>
 
 <div class="template_box">
 
   <table class="list">
     <thead>
     <tr>
-      <th>Name</th>
-      <th>Project</th>
-      <th>Active?</th>
-      <th>Sort</th>
+      <th><%= l(:field_name) %></th>
+      <th><%= l(:field_project) %></th>
+      <th><%= l(:field_status) %></th>
+      <th><%= l(:button_sort) %></th>
       <th></th>
     </tr>
     </thead>

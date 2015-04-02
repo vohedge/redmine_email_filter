@@ -3,52 +3,49 @@
 <div class="box">
   <p>
     <%= label_tag :name do %>
-      Name<span class="required"> *</span>
+      <%= l(:field_name) %><span class="required"> *</span>
     <% end %>
     <%= f.text_field :name, :size => 50 %>
   </p>
   <p>
     <%= label_tag :active do %>
-      Active?
+      <%= l(:setting_email_filter_active) %>
     <% end %>
     <%= hidden_field_tag 'email_filter[active]', false %>
     <%= f.check_box :active, {}, true, false %>
   </p>
   <p>
     <%= label_tag :project_id do %>
-      Project to save emails<span class="required"> *</span>
+      <%= l(:setting_email_filter_target_project) %><span class="required"> *</span>
     <% end %>
     <% @projects = Project.all %>
     <% if @projects.length > 0 %>
       <%= f.select :project_id, @projects.map{|t| [t.name, t.id]} %>
     <% else %>
-      Project not found
+      <%= l(:setting_email_filter_no_project) %>
     <% end %>
   </p>
   <p>
     <%= label_tag :operator do %>
-      Operator of conditions<span class="required"> *</span>
+      <%= l(:setting_email_filter_conditions) %><span class="required"> *</span>
     <% end %>
-    <%= f.select :operator, {"All" => "and", "Any" => "or"} %>
-    of the following conditions are met:
+    <%= f.select :operator, {l(:setting_email_filter_all) => "and", l(:setting_email_filter_any) => "or"} %>
+    <%= l(:text_email_filter_of_the_following_conditions_are_met) %>
   </p>
   <div id="conditions" style="padding-left: 180px;">
-    <%= label_tag :operator do %>
-      Conditions<span class="required"> *</span>
-    <% end %>
     <table>
       <%= f.fields_for :email_filter_conditions, include_id: false do |condition| %>
         <tr>
           <td>
-            <%= condition.select :email_field, {"From" => "from",
-                                             "To"      => "to",
-                                             "cc"      => "cc",
-                                             "Subject" => "subject",
-                                             "Body"    => "body"} %>
+            <%= condition.select :email_field, {l(:setting_email_filter_from) => "from",
+                                             l(:setting_email_filter_to)      => "to",
+                                             l(:setting_email_filter_cc)      => "cc",
+                                             l(:setting_email_filter_subject) => "subject",
+                                             l(:setting_email_filter_body)    => "body"} %>
           </td>
           <td>
-            <%= condition.select :match_type, {"Include" => "include",
-                                           "Not include" => "not_include"} %>
+            <%= condition.select :match_type, {l(:setting_email_filter_include) => "include",
+                                           l(:setting_email_filter_not_include) => "not_include"} %>
           </td>
           <td><%= condition.text_field :match_text, size: 30 %></td>
           <td class="buttons">

@@ -1,3 +1,20 @@
-# English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+  label_redmine_email_filter: Email Filter
+  label_email_filter_new: New Email Filter
+  label_email_filter_list: Received Email Filters
+  text_email_filter_no_project: No project created
+  text_email_filter_of_the_following_conditions_are_met: "of the following conditions are met, save the email as a ticket."
+  setting_email_filter_target_project: Project to save emails
+  setting_email_filter_active: Active
+  setting_email_filter_conditions: Conditions
+  setting_email_filter_condition_operator: Operator of conditions
+  setting_email_filter_all: All
+  setting_email_filter_any: Any
+  setting_email_filter_from: From
+  setting_email_filter_to: To
+  setting_email_filter_cc: cc
+  setting_email_filter_subject: Subject
+  setting_email_filter_body: Body
+  setting_email_filter_include: Include
+  setting_email_filter_not_include: Not Include
+

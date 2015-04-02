@@ -1,4 +1,4 @@
-<h2>New Email Filter</h2>
+<h2><%= l(:label_email_filter_new) %></h2>
 
 <%= form_for @email_filter, validate: true, html: { class: 'tabular' } do |f| -%>
   <%= render partial: 'filter_form', locals: {f: f} %>
