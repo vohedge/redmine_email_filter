@@ -23,7 +23,7 @@ class EmailFilter < ActiveRecord::Base
   validates :project_id, presence: true, numericality: { only_integer: true }
   validates :operator,   presence: true,
                          inclusion: { in: %w(and or), message: "%{value} is not a valid operator" }
-  validates :position,   presence: true, numericality: { only_integer: true }
+  validates :position,   numericality: { only_integer: true }
   validates :active,     inclusion: { in: [true, false] }
   validate  :must_have_valid_project_id
   validate  :must_have_email_filter_condition
