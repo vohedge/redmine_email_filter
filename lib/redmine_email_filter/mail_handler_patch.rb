@@ -13,6 +13,10 @@ module RedmineEmailFilter
       private
   
       def receive_with_email_filter(email)
+        # Do nothing when no active filters
+        email_filters = EmailFilter.where(active: true).order(:position)
+        return receive_without_email_filter(email) if email_filters.length < 1
+
         # Work with "redmine_email_integration" plugin
         #
         # Email Processing:
@@ -26,17 +30,12 @@ module RedmineEmailFilter
         if with_redmine_email_integration? and new_email?(email)
           if EmailMessage.message_id_exists?(email.message_id)
             logger.debug "[redmine_email_filter] Ignore duplicate email" if logger && logger.debug?
-            return
+            return false
           end
         elsif with_redmine_email_integration? and not new_email?(email)
           logger.debug "[redmine_email_filter] Delegate to redmine_email_integration plugin" if logger && logger.debug?
-          receive_without_email_filter(email)
-          return
+          return receive_without_email_filter(email)
         end
-
-        # Ignore all emails when no active filter exists
-        email_filters = EmailFilter.where(active: true).order(:position)
-        return if email_filters.length < 1
 
         # Now the filtering!
         email_filters.each do |filter|
@@ -45,7 +44,6 @@ module RedmineEmailFilter
           if ( filter.applicable?(email) )
             issue = receive_without_email_filter(email)
             logger.debug "[redmine_email_filter] Ticket Created: #{issue.subject}" if logger && logger.debug?
-
             return issue
           end
         end
