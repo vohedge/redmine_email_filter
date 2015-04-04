@@ -14,8 +14,9 @@ module RedmineEmailFilter
   
       def receive_with_email_filter(email)
         # Do nothing when no active filters
-        email_filters = EmailFilter.where(active: true).order(:position)
-        return receive_without_email_filter(email) if email_filters.length < 1
+        unless EmailFilter.where(active: true).exists?
+          return receive_without_email_filter(email)
+        end
 
         # Work with "redmine_email_integration" plugin
         #
@@ -38,6 +39,7 @@ module RedmineEmailFilter
         end
 
         # Now the filtering!
+        email_filters = EmailFilter.where(active: true).order(:position)
         email_filters.each do |filter|
           logger.debug "[redmine_email_filter] Proccessing Filter: #{filter.name}" if logger && logger.debug?
 
